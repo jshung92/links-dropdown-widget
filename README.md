@@ -10,6 +10,7 @@ This plugin will help you diplay all of the links in your blogroll as dropdown a
 
 ## Screenshot
 
-![Widget](screenshot-1.jpg)
-![Front-end](screenshot-1.jpg)
+![Widget](https://raw.githubusercontent.com/jshung92/links-dropdown-widget/master/screenshot-1.png)
+
+![Front-end](https://raw.githubusercontent.com/jshung92/links-dropdown-widget/master/screenshot-2.png)
 
