@@ -1,16 +1,17 @@
 <?php
 /*
 Plugin Name: Links Dropdown Widget
-Plugin URI: http://someblog.vv.si/
+Plugin URI: http://sihung.net/plugins/links-dropdown-widget
 Description: Display links as dropdown
-Version: 1.0
-Author: Trang Si Hung
-Author URI: http://someblog.vv.si/
+Version: 1.1
+Author: Hung Trang Si
+Author URI: http://sihung.net
 Author Email: trangsihung@gmail.com
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: linkdrop
 
-Copyright 2013 Someblog
+Copyright 2016 Hung Trang Si
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License, version 2, as
@@ -70,6 +71,9 @@ class Links_Dropdown_Widget extends WP_Widget {
 
 		$title = apply_filters('widget_title', empty( $instance['title'] ) ? __( 'Links' ) : $instance['title'], $instance, $this->id_base);
 		$default_option = $instance['default_option'];
+		$link_cat = $instance['link_cat'];
+		$open_same_window = $instance['open_same_window'];
+
 		echo $before_widget;
 
 		echo $before_title . $title . $after_title;
@@ -92,6 +96,8 @@ class Links_Dropdown_Widget extends WP_Widget {
 
 		$instance['title'] = strip_tags($new_instance['title']);
 		$instance['default_option'] = strip_tags($new_instance['default_option']);
+		$instance['link_cat'] = (int)($new_instance['link_cat']);
+		$instance['open_same_window'] = $new_instance['open_same_window'];
 
 		return $instance;
 
@@ -106,11 +112,17 @@ class Links_Dropdown_Widget extends WP_Widget {
 
 		$instance = wp_parse_args(
 			(array) $instance,
-			array( 'title' => '', 'default_option' => 'Select Option')
+			array(
+				'title' => '',
+				'default_option' => 'Select Option',
+				'link_cat' => 0
+			)
 		);
 
 		$title = esc_attr( $instance['title'] );
 		$default_option = esc_attr( $instance['default_option'] );
+		$link_cat = (int) $instance['link_cat'];
+		$open_same_window = $instance['open_same_window'];
 
 		// Display the admin form
 		include( plugin_dir_path(__FILE__) . 'views/admin.php' );
@@ -129,3 +141,16 @@ class Links_Dropdown_Widget extends WP_Widget {
 } // end class
 
 add_action( 'widgets_init', create_function( '', 'register_widget("Links_Dropdown_Widget");' ) );
+
+
+function linkdrop_categories_to_array($taxonomy){
+    $terms = get_terms($taxonomy,array(
+        'hide_empty'=>false
+    ));
+    $terms_production = array();
+    foreach ($terms as $key=>$term){
+        $terms_production[$term->term_id] = $term->name;
+    }
+    $terms_production[0] = __('All', 'linkdrop');
+    return $terms_production;
+}
